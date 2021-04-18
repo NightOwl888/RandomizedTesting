@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>RandomizedTesting.Generators</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\RandomizedTesting.Generators\RandomizedTesting.Generators.csproj" />
+  </ItemGroup>
 
 </Project>
