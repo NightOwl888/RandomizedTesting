@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup Label="NuGet Package Properties">
+    <IsPackable>true</IsPackable>
+    <PackageTags>random testing numbers text unicode html regex</PackageTags>
+    <Authors>NightOwl888</Authors>
+    <RepositoryUrl>https://github.com/NightOwl888/RandomizedTesting/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/NightOwl888/RandomizedTesting/</PackageProjectUrl>
+    <!--<PackageIconUrl></PackageIconUrl>-->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(SolutionDir)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+  </ItemGroup>
+</Project>
