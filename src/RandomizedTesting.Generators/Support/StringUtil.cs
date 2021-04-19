@@ -20,9 +20,9 @@ namespace RandomizedTesting.Generators
             if (codePoints is null)
                 throw new ArgumentNullException(nameof(codePoints));
             if (startIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
+                throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, "Non-negative number required.");
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length));
+                throw new ArgumentOutOfRangeException(nameof(length), length, "Non-negative number required.");
             if (startIndex > codePoints.Length - length)
                 throw new ArgumentOutOfRangeException(nameof(length), /*SR2.ArgumentOutOfRange_IndexLength*/"Index and length must refer to a location within the array.");
 

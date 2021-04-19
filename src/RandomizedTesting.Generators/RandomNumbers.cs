@@ -27,11 +27,11 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (minValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} must be greater than or equal to 0.");
+                throw new ArgumentOutOfRangeException(nameof(minValue), minValue, $"{nameof(minValue)} must be greater than or equal to 0.");
             if (maxValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), $"{nameof(maxValue)} must be greater than or equal to 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxValue), maxValue, $"{nameof(maxValue)} must be greater than or equal to 0.");
             if (minValue > maxValue)
-                throw new ArgumentException($"{nameof(minValue)} must be <= {nameof(maxValue)}. {nameof(minValue)}: {minValue}, {nameof(maxValue)}: {maxValue}");
+                throw new ArgumentException($"{nameof(minValue)} must be less than or equal to {nameof(maxValue)}. {nameof(minValue)}: {minValue}, {nameof(maxValue)}: {maxValue}");
             var range = maxValue - minValue;
             if (range < int.MaxValue)
                 return minValue + random.Next(1 + range);
@@ -54,11 +54,11 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (minValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} must be greater than or equal to 0.");
+                throw new ArgumentOutOfRangeException(nameof(minValue), minValue, $"{nameof(minValue)} must be greater than or equal to 0.");
             if (maxValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), $"{nameof(maxValue)} must be greater than or equal to 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxValue), maxValue, $"{nameof(maxValue)} must be greater than or equal to 0.");
             if (minValue > maxValue)
-                throw new ArgumentException($"{nameof(minValue)} must be <= {nameof(maxValue)}. {nameof(minValue)}: {minValue}, {nameof(maxValue)}: {maxValue}");
+                throw new ArgumentException($"{nameof(minValue)} must be less than or equal to {nameof(maxValue)}. {nameof(minValue)}: {minValue}, {nameof(maxValue)}: {maxValue}");
 
             BigInteger range = (BigInteger)maxValue + (BigInteger)1 - (BigInteger)minValue;
             if (range.CompareTo((BigInteger)int.MaxValue) <= 0)
@@ -113,7 +113,7 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (maxValue <= 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), $"{nameof(maxValue)} <= 0: {maxValue}");
+                throw new ArgumentOutOfRangeException(nameof(maxValue), maxValue, $"{nameof(maxValue)} must be greater than or equal to 0");
 
             long value = random.NextInt64();
             long range = maxValue - 1;

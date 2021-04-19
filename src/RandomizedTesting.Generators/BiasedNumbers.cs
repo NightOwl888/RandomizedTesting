@@ -43,11 +43,11 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (maxValue < minValue)
-                throw new ArgumentException($"max must be >= min: {minValue}, {maxValue}");
+                throw new ArgumentException($"{nameof(minValue)} must be greater than or equal to {nameof(maxValue)}: {minValue}, {maxValue}");
             if (double.IsNaN(minValue))
-                throw new ArgumentOutOfRangeException(nameof(minValue), "min must not be NaN");
+                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} must not be {nameof(double.NaN)}");
             if (double.IsNaN(maxValue))
-                throw new ArgumentOutOfRangeException(nameof(maxValue), "max must not be NaN");
+                throw new ArgumentOutOfRangeException(nameof(maxValue), $"{nameof(maxValue)} must not be {nameof(double.NaN)}");
 
             bool hasZero = minValue <= 0 && maxValue >= 0;
 
@@ -147,13 +147,14 @@ namespace RandomizedTesting.Generators
         /// <summary>
         /// Fuzzify the input value by decreasing it by a few ulps, but never past <paramref name="minValue"/>.
         /// </summary>
+        /// <exception cref="ArgumentException"><paramref name="value"/> is less than <paramref name="minValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static double FuzzDown(Random random, double value, double minValue)
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (value < minValue)
-                throw new ArgumentException("value must be >= min");
+                throw new ArgumentException($"{nameof(value)} must be greater than or equal to {nameof(minValue)}");
 
             for (int steps = RandomNumbers.RandomInt32Between(random, 1, 10); steps > 0 && value > minValue; steps--)
             {
@@ -165,13 +166,14 @@ namespace RandomizedTesting.Generators
         /// <summary>
         /// Fuzzify the input value by increasing it by a few ulps, but never past <paramref name="maxValue"/>.
         /// </summary>
+        /// <exception cref="ArgumentException"><paramref name="value"/> is greater than <paramref name="maxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static double FuzzUp(Random random, double value, double maxValue)
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (value > maxValue)
-                throw new ArgumentException($"{nameof(value)} must be <= {nameof(maxValue)}");
+                throw new ArgumentException($"{nameof(value)} must be less than or equal to {nameof(maxValue)}");
 
             for (int steps = RandomNumbers.RandomInt32Between(random, 1, 10); steps > 0 && value < maxValue; steps--)
             {
@@ -215,11 +217,11 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (maxValue < minValue)
-                throw new ArgumentException($"{nameof(minValue)} must be >= {nameof(minValue)}: {minValue}, {maxValue}");
+                throw new ArgumentException($"{nameof(minValue)} must be greater than or equal to {nameof(minValue)}: {minValue}, {maxValue}");
             if (float.IsNaN(minValue))
-                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} must not be NaN");
+                throw new ArgumentOutOfRangeException(nameof(minValue), $"{nameof(minValue)} must not be {nameof(float.NaN)}");
             if (float.IsNaN(maxValue))
-                throw new ArgumentOutOfRangeException(nameof(maxValue), $"{nameof(maxValue)} must not be NaN");
+                throw new ArgumentOutOfRangeException(nameof(maxValue), $"{nameof(maxValue)} must not be {nameof(float.NaN)}");
 
             bool hasZero = minValue <= 0 && maxValue >= 0;
 
@@ -319,13 +321,14 @@ namespace RandomizedTesting.Generators
         /// <summary>
         /// Fuzzify the input value by decreasing it by a few ulps, but never past <paramref name="minValue"/>.
         /// </summary>
+        /// <exception cref="ArgumentException"><paramref name="value"/> is less than <paramref name="minValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static float FuzzDown(Random random, float value, float minValue)
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (value < minValue)
-                throw new ArgumentException($"{nameof(value)} must be >= {nameof(minValue)}");
+                throw new ArgumentException($"{nameof(value)} must be greater than or equal to {nameof(minValue)}");
 
             for (int steps = RandomNumbers.RandomInt32Between(random, 1, 10); steps > 0 && value > minValue; steps--)
             {
@@ -337,13 +340,14 @@ namespace RandomizedTesting.Generators
         /// <summary>
         /// Fuzzify the input value by increasing it by a few ulps, but never past <paramref name="maxValue"/>.
         /// </summary>
+        /// <exception cref="ArgumentException"><paramref name="value"/> is greater than <paramref name="maxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static float FuzzUp(Random random, float value, float maxValue)
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (value > maxValue)
-                throw new ArgumentException($"{nameof(value)} must be <= {nameof(maxValue)}");
+                throw new ArgumentException($"{nameof(value)} must be less than or equal to {nameof(maxValue)}");
 
             for (int steps = RandomNumbers.RandomInt32Between(random, 1, 10); steps > 0 && value < maxValue; steps--)
             {

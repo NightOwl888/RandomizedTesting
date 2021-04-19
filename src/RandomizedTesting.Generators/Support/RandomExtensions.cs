@@ -39,6 +39,7 @@ namespace RandomizedTesting.Generators
         /// section 3.4.1, subsection C, algorithm P.
         /// </summary>
         /// <returns>A random <see cref="double"/>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static double NextGaussian(this Random random)
         {
             if (random is null)
@@ -94,6 +95,7 @@ namespace RandomizedTesting.Generators
         /// <param name="maxValue">The inclusive end of the range.</param>
         /// <returns>A random <see cref="int"/> from <paramref name="minValue"/> (inclusive) to <paramref name="maxValue"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> or <paramref name="maxValue"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static int NextInt32(this Random random, int minValue, int maxValue)
         {
@@ -216,7 +218,7 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (maxLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
 
             return NextSimpleString(random, 0, maxLength);
         }
@@ -235,11 +237,11 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (minLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(minLength), minLength, $"{nameof(minLength)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(minLength), minLength, $"{nameof(minLength)} must be greater than or equal to 0.");
             if (maxLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
             if (minLength > maxLength)
-                throw new ArgumentException($"{nameof(minLength)} must be <= {nameof(maxLength)}. {nameof(minLength)}: {minLength}, {nameof(maxLength)}: {maxLength}");
+                throw new ArgumentException($"{nameof(minLength)} must be less than or equal to {nameof(maxLength)}. {nameof(minLength)}: {minLength}, {nameof(maxLength)}: {maxLength}");
 
             int end = RandomNumbers.RandomInt32Between(random, minLength, maxLength);
             if (end == 0)
@@ -283,9 +285,9 @@ namespace RandomizedTesting.Generators
             if (maxChar < char.MinValue || maxChar > char.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(maxChar), maxChar, $"{nameof(maxChar)} must be between {nameof(char.MinValue)} and {nameof(char.MaxValue)}.");
             if (maxLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
             if (minChar > maxChar)
-                throw new ArgumentException($"{nameof(minChar)} must be <= {nameof(maxChar)}. {nameof(minChar)}: {minChar}, {nameof(maxChar)}: {maxChar}");
+                throw new ArgumentException($"{nameof(minChar)} must be less than or equal to {nameof(maxChar)}. {nameof(minChar)}: {minChar}, {nameof(maxChar)}: {maxChar}");
 
             int end = RandomNumbers.RandomInt32Between(random, 0, maxLength);
             if (end == 0)
@@ -334,7 +336,7 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (maxLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be >= 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
 
             int end = RandomNumbers.RandomInt32Between(random, 0, maxLength);
             if (end == 0)
@@ -370,9 +372,9 @@ namespace RandomizedTesting.Generators
             if (chars is null)
                 throw new ArgumentNullException(nameof(chars));
             if (startIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, $"{nameof(startIndex)} must be >= 0.");
+                throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, $"{nameof(startIndex)} must be greater than or equal to 0.");
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), startIndex, $"{nameof(length)} must be >= 0.");
+                throw new ArgumentOutOfRangeException(nameof(length), startIndex, $"{nameof(length)} must be greater than or equal to 0.");
             if (startIndex > chars.Length - length)
                 throw new ArgumentOutOfRangeException(nameof(length), $"Index and length must refer to a location within the string.");
 
@@ -459,7 +461,7 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (maxLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be >= 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
 
             StringBuilder regexp = new StringBuilder(maxLength);
             for (int i = RandomNumbers.RandomInt32Between(random, 0, maxLength); i > 0; i--)
@@ -750,7 +752,7 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (numElements < 0)
-                throw new ArgumentOutOfRangeException(nameof(numElements), numElements, $"{nameof(numElements)} must be >= 0.");
+                throw new ArgumentOutOfRangeException(nameof(numElements), numElements, $"{nameof(numElements)} must be greater than or equal to 0.");
 
             int end = RandomNumbers.RandomInt32Between(random, 0, numElements);
             if (end == 0)
@@ -1013,11 +1015,11 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (minLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(minLength), minLength, $"{nameof(minLength)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(minLength), minLength, $"{nameof(minLength)} must be greater than or equal to 0.");
             if (maxLength < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
             if (minLength > maxLength)
-                throw new ArgumentException($"{nameof(minLength)} must be <= {nameof(maxLength)}. {nameof(minLength)}: {minLength}, {nameof(maxLength)}: {maxLength}");
+                throw new ArgumentException($"{nameof(minLength)} must be less than or equal to {nameof(maxLength)}. {nameof(minLength)}: {minLength}, {nameof(maxLength)}: {maxLength}");
 
             int end = NextInt32(random, minLength, maxLength);
             int block = random.Next(RealisticUnicodeGenerator.blockStarts.Length);
@@ -1037,7 +1039,7 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length), length, $"{nameof(length)} is less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(length), length, $"{nameof(length)} must be greater than or equal to 0.");
 
             char[] buffer = new char[length * 3];
             int bytes = length;

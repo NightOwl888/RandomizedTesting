@@ -43,9 +43,10 @@ namespace RandomizedTesting.Generators
         }
 
         /// <summary>
-        /// Parse the given <see cref="string"/> <see cref="s"/> and split into BMP and supplementary codepoints.
+        /// Parse the given <see cref="string"/> <paramref name="value"/> and split into BMP and supplementary codepoints.
         /// </summary>
         /// <param name="value"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
         public CodepointSetGenerator(string value)
         {
             if (value is null)
@@ -96,6 +97,12 @@ namespace RandomizedTesting.Generators
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
+            if (minCodeUnits < 0)
+                throw new ArgumentOutOfRangeException(nameof(minCodeUnits), $"{nameof(minCodeUnits)} must be greater than or equal to 0.");
+            if (maxCodeUnits < 0)
+                throw new ArgumentOutOfRangeException(nameof(maxCodeUnits), $"{nameof(maxCodeUnits)} must be greater than or equal to 0.");
+            if (minCodeUnits > maxCodeUnits)
+                throw new ArgumentException($"{nameof(minCodeUnits)} must be less than or equal to {nameof(maxCodeUnits)}. {nameof(minCodeUnits)}: {minCodeUnits}, {nameof(maxCodeUnits)}: {maxCodeUnits}");
 
             int length = RandomNumbers.RandomInt32Between(random, minCodeUnits, maxCodeUnits);
 
