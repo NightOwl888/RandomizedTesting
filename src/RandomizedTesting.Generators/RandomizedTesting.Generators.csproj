@@ -4,6 +4,20 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup Label="NuGet Package Settings">
+    <AssemblyTitle>RandomizedTesting.Generators</AssemblyTitle>
+    <Description>
+      RandomizedTesting.Generators contains generators for random numbers, several forms of text (ASCII, Unicode, realistic Unicode, HTML-like, regular expression-like)
+      as well providing methods to pick random selections from collections and arrays and even create randomly generated Regex classes. These features are implemented
+      as simple low-level extension methods to for the Random class so there is very little to learn to quickly generate random data for your tests. Why would you want
+      tests to have random data? This is to fill situations where it is not practical to test the entire range of values in a single test run, for example, with applications
+      that analyze text. Tests can instead be designed to provide different input
+      every time they run to catch edge cases that are difficult to test for. Generating random data also has many other purposes, such as quickly generating a set of text
+      files to benchmark with without having to store several hundred MB worth of files (since the same random seed will always generate the same data).
+    </Description>
+    <PackageTags>$(PackageTags);random;data;generator;unit;testing;text</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="J2N" Version="$(J2NPackageReferenceVersion)" />
   </ItemGroup>

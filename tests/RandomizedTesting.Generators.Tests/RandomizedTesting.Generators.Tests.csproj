@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\RandomizedTesting.Generators\RandomizedTesting.Generators.csproj" />
+    <ProjectReference Include="..\..\src\RandomizedTesting\RandomizedTesting.csproj" />
   </ItemGroup>
 
 </Project>
