@@ -75,7 +75,7 @@ namespace RandomizedTesting.Generators
                     v += SurrogateRange;
                 chars[i] = v;
             }
-            return StringUtil.CodePointsToString(chars, 0, chars.Length); //new string(chars, 0, chars.Length);
+            return Character.ToString(chars, 0, chars.Length); //new string(chars, 0, chars.Length);
         }
 
         /// <summary>

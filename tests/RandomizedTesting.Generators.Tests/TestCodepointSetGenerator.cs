@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using J2N;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -22,7 +23,7 @@ namespace RandomizedTesting.Generators
             0x10FFFD,
         };
 
-        private readonly static string withSurrogates = StringUtil.CodePointsToString(codepoints, 0, codepoints.Length); //new string(codepoints, 0, codepoints.Length);
+        private readonly static string withSurrogates = Character.ToString(codepoints, 0, codepoints.Length); //new string(codepoints, 0, codepoints.Length);
 
         public class CodepointSetOnChars : StringGeneratorTestBase
         {
@@ -101,7 +102,7 @@ namespace RandomizedTesting.Generators
         public class CodepointSetOnSurrogatesOnly : StringGeneratorTestBase
         {
             public CodepointSetOnSurrogatesOnly()
-                : base(new CodepointSetGenerator(StringUtil.CodePointsToString(surrogates, 0, surrogates.Length)))
+                : base(new CodepointSetGenerator(Character.ToString(surrogates, 0, surrogates.Length)))
             {
             }
 

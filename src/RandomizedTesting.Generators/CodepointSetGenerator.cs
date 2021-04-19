@@ -150,7 +150,7 @@ namespace RandomizedTesting.Generators
                 }
                 actual++;
             }
-            return StringUtil.CodePointsToString(codepoints, 0, actual);
+            return Character.ToString(codepoints, 0, actual);
         }
 
         public override string OfCodePointsLength(Random random, int minCodePoints, int maxCodePoints)
@@ -164,7 +164,7 @@ namespace RandomizedTesting.Generators
             {
                 codepoints[--length] = all[random.Next(all.Length)];
             }
-            return StringUtil.CodePointsToString(codepoints, 0, codepoints.Length); //new string(codepoints, 0, codepoints.Length);
+            return Character.ToString(codepoints, 0, codepoints.Length); //new string(codepoints, 0, codepoints.Length);
         }
 
         /// <summary>
