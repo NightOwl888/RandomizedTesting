@@ -95,7 +95,6 @@ namespace RandomizedTesting.Generators
         /// <param name="maxValue">The inclusive end of the range.</param>
         /// <returns>A random <see cref="int"/> from <paramref name="minValue"/> (inclusive) to <paramref name="maxValue"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> or <paramref name="maxValue"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static int NextInt32(this Random random, int minValue, int maxValue)
         {

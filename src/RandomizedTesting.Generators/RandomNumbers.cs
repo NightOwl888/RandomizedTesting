@@ -20,16 +20,11 @@ namespace RandomizedTesting.Generators
         /// <param name="maxValue">The inclusive end of the range.</param>
         /// <returns>A random <see cref="int"/> from <paramref name="minValue"/> (inclusive) to <paramref name="maxValue"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> or <paramref name="maxValue"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static int RandomInt32Between(Random random, int minValue, int maxValue)
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
-            if (minValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(minValue), minValue, $"{nameof(minValue)} must be greater than or equal to 0.");
-            if (maxValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), maxValue, $"{nameof(maxValue)} must be greater than or equal to 0.");
             if (minValue > maxValue)
                 throw new ArgumentException($"{nameof(minValue)} must be less than or equal to {nameof(maxValue)}. {nameof(minValue)}: {minValue}, {nameof(maxValue)}: {maxValue}");
             var range = maxValue - minValue;
@@ -47,16 +42,11 @@ namespace RandomizedTesting.Generators
         /// <param name="maxValue">The inclusive end of the range.</param>
         /// <returns>A random <see cref="long"/> from <paramref name="minValue"/> to <paramref name="maxValue"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minValue"/> or <paramref name="maxValue"/> is less than zero.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
         public static long RandomInt64Between(Random random, long minValue, long maxValue)
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
-            if (minValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(minValue), minValue, $"{nameof(minValue)} must be greater than or equal to 0.");
-            if (maxValue < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxValue), maxValue, $"{nameof(maxValue)} must be greater than or equal to 0.");
             if (minValue > maxValue)
                 throw new ArgumentException($"{nameof(minValue)} must be less than or equal to {nameof(maxValue)}. {nameof(minValue)}: {minValue}, {nameof(maxValue)}: {maxValue}");
 
