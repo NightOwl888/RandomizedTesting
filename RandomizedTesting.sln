@@ -5,6 +5,7 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{57E113A5-805B-46F8-90A6-A041800F03E0}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
 		build\dependencies.props = build\dependencies.props
 		build\key.snk = build\key.snk
 		build\nuget.props = build\nuget.props
