@@ -77,6 +77,7 @@ namespace RandomizedTesting.Generators
         /// <param name="random">This <see cref="Random"/>.</param>
         /// <returns>A random <see cref="bool"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool NextBoolean(this Random random)
         {
             if (random is null)
@@ -96,6 +97,7 @@ namespace RandomizedTesting.Generators
         /// <returns>A random <see cref="int"/> from <paramref name="minValue"/> (inclusive) to <paramref name="maxValue"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int NextInt32(this Random random, int minValue, int maxValue)
         {
             return RandomNumbers.RandomInt32Between(random, minValue, maxValue);
@@ -127,6 +129,7 @@ namespace RandomizedTesting.Generators
         /// <returns>A random <see cref="long"/> between 0 and <paramref name="maxValue"/> - 1.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxValue"/> is less than 1.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long NextInt64(this Random random, long maxValue)
         {
             return RandomNumbers.NextInt64(random, maxValue);
@@ -141,17 +144,19 @@ namespace RandomizedTesting.Generators
         /// <returns>A random <see cref="long"/> from <paramref name="minValue"/> to <paramref name="maxValue"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minValue"/> is greater than <paramref name="maxValue"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long NextInt64(this Random random, long minValue, long maxValue)
         {
             return RandomNumbers.RandomInt64Between(random, minValue, maxValue);
         }
 
         /// <summary>
-        /// Generates a random <see cref="float"/>.
+        /// Generates a random <see cref="float"/> between 0.0 (inclusive) and 1.0 (exclusive).
         /// </summary>
         /// <param name="random">This <see cref="Random"/>.</param>
-        /// <returns>A random <see cref="float"/>.</returns>
+        /// <returns>A random <see cref="float"/> between 0.0 (inclusive) and 1.0 (exclusive).</returns>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float NextSingle(this Random random) // .NET specific to cover missing member from Java
         {
             if (random is null)
@@ -188,6 +193,7 @@ namespace RandomizedTesting.Generators
         /// <param name="list">A list or array to pick a random element from.</param>
         /// <exception cref="ArgumentException"><paramref name="list"/> contains no items.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> or <paramref name="list"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T NextFrom<T>(this Random random, IList<T> list)
         {
             return RandomPicks.RandomFrom(random, list);
@@ -200,6 +206,7 @@ namespace RandomizedTesting.Generators
         /// <param name="collection">A collection to pick a random element from.</param>
         /// <exception cref="ArgumentException"><paramref name="collection"/> contains no items.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> or <paramref name="collection"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T NextFrom<T>(this Random random, ICollection<T> collection)
         {
             return RandomPicks.RandomFrom(random, collection);
@@ -308,6 +315,7 @@ namespace RandomizedTesting.Generators
         /// </summary>
         /// <param name="random">This <see cref="Random"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string NextSimpleString(this Random random)
         {
             return NextSimpleString(random, 0, 10);
@@ -318,6 +326,7 @@ namespace RandomizedTesting.Generators
         /// </summary>
         /// <param name="random">This <see cref="Random"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string NextUnicodeString(this Random random)
         {
             return NextUnicodeString(random, 20);
@@ -415,6 +424,7 @@ namespace RandomizedTesting.Generators
         /// </summary>
         /// <param name="random">This <see cref="Random"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string NextRegexishString(this Random random)
         {
             if (random is null)
@@ -983,6 +993,7 @@ namespace RandomizedTesting.Generators
         /// </summary>
         /// <param name="random">This <see cref="Random"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string NextRealisticUnicodeString(this Random random)
         {
             return NextRealisticUnicodeString(random, 20);
@@ -995,6 +1006,7 @@ namespace RandomizedTesting.Generators
         /// <param name="maxLength">The maximum length of the string to return (inclusive).</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxLength"/> is less than 0.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string NextRealisticUnicodeString(this Random random, int maxLength)
         {
             return NextRealisticUnicodeString(random, 0, maxLength);
