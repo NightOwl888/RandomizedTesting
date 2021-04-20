@@ -1,10 +1,9 @@
 {
-  "$schema": "https://raw.githubusercontent.com/AArnott/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "2.7.8-beta.{height}",
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "2.7.9-alpha.{height}",
   "assemblyVersion": {
     "precision": "major"
   },
-  "versionHeightOffset": "-10",
   "publicReleaseRefSpec": [
     "^refs/heads/main$",
     "^refs/heads/master$",
