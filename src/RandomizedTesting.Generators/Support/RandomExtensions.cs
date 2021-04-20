@@ -267,7 +267,7 @@ namespace RandomizedTesting.Generators
         /// <returns>a random string consisting only of characters between <paramref name="minChar"/> (inclusive)
         /// and <paramref name="maxChar"/> (inclusive).</returns>
         /// <exception cref="ArgumentException"><paramref name="minChar"/> is greater than <paramref name="maxChar"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minLength"/> or <paramref name="minLength"/> is not in
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="minChar"/> or <paramref name="maxChar"/> is not in
         /// the range between <see cref="char.MinValue"/> and <see cref="char.MaxValue"/>.
         /// <para/>
         /// -or-
