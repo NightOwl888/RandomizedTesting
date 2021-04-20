@@ -28,7 +28,7 @@
   <PropertyGroup Label="Copyright Info">
     <Company>RandomizedTesting</Company>
     <CurrentYear Condition=" '$(CurrentYear)' == '' ">$([System.DateTime]::UtcNow.Year.ToString())</CurrentYear>
-    <BeginCopyrightYear>2019</BeginCopyrightYear>
+    <BeginCopyrightYear>2021</BeginCopyrightYear>
     <CopyrightYearRange>$(BeginCopyrightYear) - $(CurrentYear)</CopyrightYearRange>
     <CopyrightYearRange Condition=" '$(BeginCopyrightYear)' == '$(CurrentYear)' ">$(CurrentYear)</CopyrightYearRange>
     <Copyright>Copyright © $(CopyrightYearRange) $(Company)</Copyright>

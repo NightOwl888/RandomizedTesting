@@ -1,13 +1,14 @@
 Randomized Testing
 =========
 
-[![Nuget](https://img.shields.io/nuget/dt/Morfologik.Stemming)](https://www.nuget.org/packages/RandomizedTesting.Generators)
+[![Nuget](https://img.shields.io/nuget/dt/RandomizedTesting.Generators)](https://www.nuget.org/packages/RandomizedTesting.Generators)
 [![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/NightOwl888/bb904c4c-d9de-434f-9b26-a6210ef516bc/2/release/v2.7.8)](https://dev.azure.com/NightOwl888/RandomizedTesting/_build?definitionId=2&_a=summary)
-[![GitHub](https://img.shields.io/github/license/NightOwl888/Morfologik.Stemming)](https://github.com/NightOwl888/RandomizedTesting/blob/master/LICENSE.txt)
+[![GitHub](https://img.shields.io/github/license/NightOwl888/RandomizedTesting)](https://github.com/NightOwl888/RandomizedTesting/blob/master/LICENSE.txt)
+[![GitHub Sponsors](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/NightOwl888)
 
 This is a C# port of the only the generators from the [Java randomizedtesting](https://github.com/randomizedtesting/randomizedtesting) library.
 
-In addition to the random generators, the `RandomExtensions` class contains several useful low-level extension methods for generating numbers, text (html-like, regex-like, unicode, realistic unicode), random picks from collections, or random regular expression instances.
+In addition to the random generators, the `RandomExtensions` class contains several useful low-level extension methods for generating numbers, text (html-like, regex-like, unicode, realistic unicode, plain ASCII), random picks from collections, or random regular expression instances.
 
 ## Random Generator Examples
 
@@ -74,3 +75,9 @@ string recased = random.NextStringRecasing(toRecase);
 // Generate a random Regex that compiles
 Regex pattern = random.NextRegex();
 ```
+
+## Giving Back
+
+If you find this library to be useful, please star us on GitHub and consider a sponsorship so we can continue bringing you great free tools like this one.
+
+[![GitHub Sponsors](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/NightOwl888)
