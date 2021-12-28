@@ -6,9 +6,7 @@
 
   <PropertyGroup Label="NuGet Package Settings">
     <AssemblyTitle>RandomizedTesting</AssemblyTitle>
-    <Description>
-      This is a package dependency that is not meant to be referenced directly. Please use https://www.nuget.org/packages/RandomizedTesting.Generators instead.
-    </Description>
+    <Description>This is a package dependency that is not meant to be referenced directly. Please use https://www.nuget.org/packages/RandomizedTesting.Generators instead.</Description>
     <PackageTags>$(PackageTags)</PackageTags>
   </PropertyGroup>
 
