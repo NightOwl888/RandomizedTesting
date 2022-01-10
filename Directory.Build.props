@@ -8,7 +8,7 @@
   </PropertyGroup>
   
   <PropertyGroup Label="Assembly Signing">
-    <AssemblyOriginatorKeyFile>$(RepositoryRoot)build/key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(RepositoryRoot).build/key.snk</AssemblyOriginatorKeyFile>
     <PublicKey>002400000480000094000000060200000024000052534131000400000100010059f80378127200f02ed976f6cf17d3359bac999bd9ec8388c11a54a5e98601069b437168c12af08b8a728b41b7e4aece1867c158f0d672a2c6e41773ab0853b515ee27634e3e87dbdc8550bc66b44002e5baceab54db20065714c85e81ffd7b31deb0f76eee0bfef9d1ccdd3dab5980d85724da66c0e4567b1f3c87834ac44bf</PublicKey>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>

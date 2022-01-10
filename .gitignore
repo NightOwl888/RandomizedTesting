@@ -356,3 +356,6 @@ MigrationBackup/
 
 # BeyondCompare .orig files (when doing conflict resolution)
 *.orig
+
+# Build Artifiacts
+_artifacts/
