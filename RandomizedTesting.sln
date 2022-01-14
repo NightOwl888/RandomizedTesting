@@ -9,9 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{57E113
 		.build\dependencies.props = .build\dependencies.props
 		.build\key.snk = .build\key.snk
 		.build\nuget.props = .build\nuget.props
+		.build\runbuild.ps1 = .build\runbuild.ps1
 		.build\TestReferences.Common.targets = .build\TestReferences.Common.targets
 		.build\TestTargetFramework.props = .build\TestTargetFramework.props
 		version.json = version.json
+		.build\version.ps1 = .build\version.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9545F378-6BE8-4930-AAF2-E07FFA31E1A5}"
