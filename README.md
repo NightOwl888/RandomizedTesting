@@ -2,8 +2,8 @@ Randomized Testing
 =========
 
 [![Nuget](https://img.shields.io/nuget/dt/RandomizedTesting.Generators)](https://www.nuget.org/packages/RandomizedTesting.Generators)
-[![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/NightOwl888/RandomizedTesting/3/release/v2.7.8)](https://dev.azure.com/NightOwl888/RandomizedTesting/_build?definitionId=3)
-[![GitHub](https://img.shields.io/github/license/NightOwl888/RandomizedTesting)](https://github.com/NightOwl888/RandomizedTesting/blob/master/LICENSE.txt)
+[![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/NightOwl888/RandomizedTesting/3/main)](https://dev.azure.com/NightOwl888/RandomizedTesting/_build?definitionId=3)
+[![GitHub](https://img.shields.io/github/license/NightOwl888/RandomizedTesting)](https://github.com/NightOwl888/RandomizedTesting/blob/main/LICENSE.txt)
 [![GitHub Sponsors](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/NightOwl888)
 
 This is a C# port of the only the generators from the [Java randomizedtesting](https://github.com/randomizedtesting/randomizedtesting) library.
