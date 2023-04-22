@@ -1,5 +1,6 @@
 ﻿using J2N;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace RandomizedTesting.Generators
 {
@@ -128,29 +129,18 @@ namespace RandomizedTesting.Generators
                 }
             }
 
-            int[] codepoints = new int[length];
-            int actual = 0;
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
+
             while (length > 0)
             {
-                if (length == 1)
-                {
-                    codepoints[actual] = bmp[random.Next(bmp.Length)];
-                }
-                else
-                {
-                    codepoints[actual] = all[random.Next(all.Length)];
-                }
-                if (Character.IsSupplementaryCodePoint(codepoints[actual]))
-                {
-                    length -= 2;
-                }
-                else
-                {
-                    length -= 1;
-                }
-                actual++;
+                int codePoint = length == 1 ? bmp[random.Next(bmp.Length)] : all[random.Next(all.Length)];
+                sb.AppendCodePoint(codePoint);
+                length -= Character.CharCount(codePoint);
             }
-            return Character.ToString(codepoints, 0, actual);
+            return sb.ToString();
         }
 
         public override string OfCodePointsLength(Random random, int minCodePoints, int maxCodePoints)
@@ -159,17 +149,22 @@ namespace RandomizedTesting.Generators
                 throw new ArgumentNullException(nameof(random));
 
             int length = RandomNumbers.RandomInt32Between(random, minCodePoints, maxCodePoints);
-            int[] codepoints = new int[length];
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
             while (length > 0)
             {
-                codepoints[--length] = all[random.Next(all.Length)];
+                sb.AppendCodePoint(all[random.Next(all.Length)]);
+                length--;
             }
-            return Character.ToString(codepoints, 0, codepoints.Length); //new string(codepoints, 0, codepoints.Length);
+            return sb.ToString();
         }
 
         /// <summary>
         /// Is a given number odd?
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsOdd(int v)
         {
             return (v & 1) != 0;
@@ -189,6 +184,7 @@ namespace RandomizedTesting.Generators
             return concat;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsSurrogate(char chr)
         {
             return (chr >= 0xd800 && chr <= 0xdfff);

@@ -8,6 +8,8 @@ namespace RandomizedTesting.Generators
     /// </summary>
     public abstract class StringGenerator
     {
+        protected const int CharStackBufferSize = 64;
+
         /// <summary>
         /// An alias for <see cref="OfCodeUnitsLength(Random, int, int)"/>.
         /// </summary>

@@ -83,7 +83,10 @@ namespace RandomizedTesting.Generators
             int length = RandomNumbers.RandomInt32Between(random, minCodeUnits, maxCodeUnits);
             int block = random.Next(blockStarts.Length);
 
-            StringBuilder sb = new StringBuilder();
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
             while (length > 0)
             {
                 int cp = RandomNumbers.RandomInt32Between(random, blockStarts[block], blockEnds[block]);
@@ -116,7 +119,10 @@ namespace RandomizedTesting.Generators
 
             int length = RandomNumbers.RandomInt32Between(random, minCodePoints, maxCodePoints);
             int block = random.Next(blockStarts.Length);
-            StringBuilder sb = new StringBuilder();
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
             for (int i = 0; i < length; i++)
                 sb.AppendCodePoint(RandomNumbers.RandomInt32Between(random, blockStarts[block], blockEnds[block]));
             return sb.ToString();
