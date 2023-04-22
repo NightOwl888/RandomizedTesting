@@ -15,7 +15,7 @@ namespace RandomizedTesting.Generators
     /// </summary>
     public static class RandomExtensions
     {
-        private class RandomProperties
+        private sealed class RandomProperties
         {
             /// <summary>
             /// The boolean value indicating if the second Gaussian number is available.
@@ -44,6 +44,9 @@ namespace RandomizedTesting.Generators
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
+
+            if (random is Randomizer randomizer)
+                return randomizer.NextGaussian();
 
             var props = randomCache.GetOrCreateValue(random);
 
@@ -83,6 +86,9 @@ namespace RandomizedTesting.Generators
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
 
+            if (random is Randomizer randomizer)
+                return randomizer.NextBoolean();
+
             return random.Next(1, 100) > 50;
         }
 
@@ -114,6 +120,9 @@ namespace RandomizedTesting.Generators
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
+
+            if (random is Randomizer randomizer)
+                return randomizer.NextInt64();
 
             byte[] buffer = new byte[8];
             random.NextBytes(buffer);
@@ -161,6 +170,9 @@ namespace RandomizedTesting.Generators
         {
             if (random is null)
                 throw new ArgumentNullException(nameof(random));
+
+            if (random is Randomizer randomizer)
+                return randomizer.NextSingle();
 
             return (float)random.NextDouble(); // always between 0.0 and 1.0, so it will always cast
         }

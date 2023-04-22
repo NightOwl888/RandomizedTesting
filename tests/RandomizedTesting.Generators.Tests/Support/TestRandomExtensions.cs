@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RandomizedTesting.Generators
 {
@@ -114,6 +111,78 @@ namespace RandomizedTesting.Generators
             }
             Assert.IsTrue(someDifferent, "Calling nextGaussian 100 times resulted in same number");
             Assert.IsTrue(someInsideStd, "Calling nextGaussian 100 times resulted in no number within 1 std. deviation of mean");
+        }
+
+        [Test]
+        public void TestNextInt64AgainstJ2NRandomizer()
+        {
+            long expected;
+            long actual;
+            long seed = new Random().NextInt64();
+
+            J2N.Randomizer randomizer = new J2N.Randomizer(seed);
+            Random random = new J2N.Randomizer(seed);
+
+            for (long i = 0; i < 100; i++)
+            {
+                expected = randomizer.NextInt64();
+                actual = random.NextInt64();
+                Assert.IsTrue(expected == actual);
+            }
+        }
+
+        [Test]
+        public void TestNextSingleAgainstJ2NRandomizer()
+        {
+            float expected;
+            float actual;
+            long seed = new Random().NextInt64();
+
+            J2N.Randomizer randomizer = new J2N.Randomizer(seed);
+            Random random = new J2N.Randomizer(seed);
+
+            for (long i = 0; i < 100; i++)
+            {
+                expected = randomizer.NextSingle();
+                actual = random.NextSingle();
+                Assert.IsTrue(expected == actual);
+            }
+        }
+
+        [Test]
+        public void TestNextBooleanAgainstJ2NRandomizer()
+        {
+            bool expected;
+            bool actual;
+            long seed = new Random().NextInt64();
+
+            J2N.Randomizer randomizer = new J2N.Randomizer(seed);
+            Random random = new J2N.Randomizer(seed);
+
+            for (long i = 0; i < 100; i++)
+            {
+                expected = randomizer.NextBoolean();
+                actual = random.NextBoolean();
+                Assert.IsTrue(expected == actual);
+            }
+        }
+
+        [Test]
+        public void TestNextGaussianAgainstJ2NRandomizer()
+        {
+            double expected;
+            double actual;
+            long seed = new Random().NextInt64();
+
+            J2N.Randomizer randomizer = new J2N.Randomizer(seed);
+            Random random = new J2N.Randomizer(seed);
+
+            for (long i = 0; i < 100; i++)
+            {
+                expected = randomizer.NextGaussian();
+                actual = random.NextGaussian();
+                Assert.IsTrue(expected == actual);
+            }
         }
 
         /**
