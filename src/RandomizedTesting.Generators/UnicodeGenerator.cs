@@ -24,34 +24,43 @@ namespace RandomizedTesting.Generators
                 throw new ArgumentException($"{nameof(minCodeUnits)} must be less than or equal {nameof(maxCodeUnits)}. {nameof(minCodeUnits)}: {minCodeUnits}, {nameof(maxCodeUnits)}: {maxCodeUnits}");
 
             int length = RandomNumbers.RandomInt32Between(random, minCodeUnits, maxCodeUnits);
-            char[] chars = new char[length];
-            for (int i = 0; i < chars.Length;)
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
+            for (int i = 0; i < length;)
             {
                 int t = RandomNumbers.RandomInt32Between(random, 0, 4);
                 if (t == 0 && i < length - 1)
                 {
                     // Make a surrogate pair
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xd800, 0xdbff); // high
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xdc00, 0xdfff); // low
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0xd800, 0xdbff)); // high
+                    i++;
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0xdc00, 0xdfff)); // low
+                    i++;
                 }
                 else if (t <= 1)
                 {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0, 0x007f);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0, 0x007f));
+                    i++;
                 }
                 else if (t == 2)
                 {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0x80, 0x07ff);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0x80, 0x07ff));
+                    i++;
                 }
                 else if (t == 3)
                 {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0x800, 0xd7ff);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0x800, 0xd7ff));
+                    i++;
                 }
                 else if (t == 4)
                 {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xe000, 0xffff);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0xe000, 0xffff));
+                    i++;
                 }
             }
-            return new string(chars);
+            return sb.ToString();
         }
 
         /// <inheritdoc/>
@@ -67,15 +76,18 @@ namespace RandomizedTesting.Generators
                 throw new ArgumentException($"{nameof(minCodePoints)} must be less than or equal {nameof(maxCodePoints)}. {nameof(minCodePoints)}: {minCodePoints}, {nameof(maxCodePoints)}: {maxCodePoints}");
 
             int length = RandomNumbers.RandomInt32Between(random, minCodePoints, maxCodePoints);
-            int[] chars = new int[length];
-            for (int i = 0; i < chars.Length; i++)
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
+            for (int i = 0; i < length; i++)
             {
                 int v = RandomNumbers.RandomInt32Between(random, 0, CodePointRange);
                 if (v >= Character.MinSurrogate)
                     v += SurrogateRange;
-                chars[i] = v;
+                sb.AppendCodePoint(v);
             }
-            return Character.ToString(chars, 0, chars.Length); //new string(chars, 0, chars.Length);
+            return sb.ToString();
         }
 
         /// <summary>
@@ -102,10 +114,14 @@ namespace RandomizedTesting.Generators
                 throw new ArgumentException($"{nameof(minUtf8Length)} must be less than or equal {nameof(maxUtf8Length)}. {nameof(minUtf8Length)}: {minUtf8Length}, {nameof(maxUtf8Length)}: {maxUtf8Length}");
 
             int length = RandomNumbers.RandomInt32Between(random, minUtf8Length, maxUtf8Length);
-            char[] buffer = new char[length * 3];
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
+            int bufferLength = length * 3;
             int bytes = length;
             int i = 0;
-            for (; i < buffer.Length && bytes != 0; i++)
+            for (; i < bufferLength && bytes != 0; i++)
             {
                 int t;
                 if (bytes >= 4)
@@ -126,33 +142,34 @@ namespace RandomizedTesting.Generators
                 }
                 if (t == 0)
                 {
-                    buffer[i] = (char)RandomNumbers.RandomInt32Between(random, 0, 0x7f);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0, 0x7f));
                     bytes--;
                 }
                 else if (1 == t)
                 {
-                    buffer[i] = (char)RandomNumbers.RandomInt32Between(random, 0x80, 0x7ff);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0x80, 0x7ff));
                     bytes -= 2;
                 }
                 else if (2 == t)
                 {
-                    buffer[i] = (char)RandomNumbers.RandomInt32Between(random, 0x800, 0xd7ff);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0x800, 0xd7ff));
                     bytes -= 3;
                 }
                 else if (3 == t)
                 {
-                    buffer[i] = (char)RandomNumbers.RandomInt32Between(random, 0xe000, 0xffff);
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0xe000, 0xffff));
                     bytes -= 3;
                 }
                 else if (4 == t)
                 {
                     // Make a surrogate pair
-                    buffer[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xd800, 0xdbff); // high
-                    buffer[i] = (char)RandomNumbers.RandomInt32Between(random, 0xdc00, 0xdfff);   // low
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0xd800, 0xdbff)); // high
+                    i++;
+                    sb.Append((char)RandomNumbers.RandomInt32Between(random, 0xdc00, 0xdfff)); // low
                     bytes -= 4;
                 }
             }
-            return new string(buffer, 0, i);
+            return sb.ToString();
         }
     }
 }

@@ -1,11 +1,9 @@
 ﻿using J2N;
-using J2N.Text;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RandomizedTesting.Generators
@@ -15,6 +13,8 @@ namespace RandomizedTesting.Generators
     /// </summary>
     public static class RandomExtensions
     {
+        private const int CharStackBufferSize = 64;
+
         private sealed class RandomProperties
         {
             /// <summary>
@@ -267,12 +267,13 @@ namespace RandomizedTesting.Generators
                 // allow 0 length
                 return string.Empty;
             }
-            char[] buffer = new char[end];
-            for (int i = 0; i < end; i++)
-            {
-                buffer[i] = (char)RandomNumbers.RandomInt32Between(random, 'a', 'z');
-            }
-            return new string(buffer, 0, end);
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            var sb = end <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[end])
+                : new ValueStringBuilder(end);
+
+            sb.AppendNextSimpleStringInternal(random, end);
+            return sb.ToString();
         }
 
         /// <summary>
@@ -313,12 +314,15 @@ namespace RandomizedTesting.Generators
                 // allow 0 length
                 return string.Empty;
             }
-            char[] buffer = new char[end];
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = end <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[end])
+                : new ValueStringBuilder(end);
             for (int i = 0; i < end; i++)
             {
-                buffer[i] = (char)RandomNumbers.RandomInt32Between(random, minChar, maxChar);
+                sb.Append((char)RandomNumbers.RandomInt32Between(random, minChar, maxChar));
             }
-            return new string(buffer, 0, end);
+            return sb.ToString();
         }
 
         /// <summary>
@@ -364,9 +368,13 @@ namespace RandomizedTesting.Generators
                 // allow 0 length
                 return string.Empty;
             }
-            char[] buffer = new char[end];
-            NextFixedLengthUnicodeString(random, buffer, 0, buffer.Length);
-            return new string(buffer, 0, end);
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            var sb = end <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[end])
+                : new ValueStringBuilder(end);
+
+            sb.AppendNextFixedLengthUnicodeString(random, length: end);
+            return sb.ToString();
         }
 
         /// <summary>
@@ -398,36 +406,25 @@ namespace RandomizedTesting.Generators
             if (startIndex > chars.Length - length)
                 throw new ArgumentOutOfRangeException(nameof(length), $"Index and length must refer to a location within the string.");
 
-            int i = startIndex;
-            int end = startIndex + length;
-            while (i < end)
-            {
-                int t = random.Next(5);
-                if (0 == t && i < length - 1)
-                {
-                    // Make a surrogate pair
-                    // High surrogate
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xd800, 0xdbff);
-                    // Low surrogate
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xdc00, 0xdfff);
-                }
-                else if (t <= 1)
-                {
-                    chars[i++] = (char)random.Next(0x80);
-                }
-                else if (2 == t)
-                {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0x80, 0x7ff);
-                }
-                else if (3 == t)
-                {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0x800, 0xd7ff);
-                }
-                else if (4 == t)
-                {
-                    chars[i++] = (char)RandomNumbers.RandomInt32Between(random, 0xe000, 0xffff);
-                }
-            }
+            Span<char> destination = chars.AsSpan(startIndex, length);
+            using var sb = new ValueStringBuilder(destination);
+            sb.AppendNextFixedLengthUnicodeString(random, length);
+        }
+
+        /// <summary>
+        /// Fills provided <see cref="Span{Char}"/> with valid random unicode code
+        /// unit sequence.
+        /// </summary>
+        /// <param name="random">This <see cref="Random"/>.</param>
+        /// <param name="destination">A <see cref="Span{Char}"/> with preallocated space to put the characters.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="random"/> is <c>null</c>.</exception>
+        public static void NextFixedLengthUnicodeString(this Random random, Span<char> destination)
+        {
+            if (random is null)
+                throw new ArgumentNullException(nameof(random));
+
+            using var sb = new ValueStringBuilder(destination);
+            sb.AppendNextFixedLengthUnicodeString(random, destination.Length);
         }
 
         /// <summary>
@@ -484,7 +481,11 @@ namespace RandomizedTesting.Generators
             if (maxLength < 0)
                 throw new ArgumentOutOfRangeException(nameof(maxLength), maxLength, $"{nameof(maxLength)} must be greater than or equal to 0.");
 
-            StringBuilder regexp = new StringBuilder(maxLength);
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var regexp = maxLength <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[maxLength])
+                : new ValueStringBuilder(maxLength);
+
             for (int i = RandomNumbers.RandomInt32Between(random, 0, maxLength); i > 0; i--)
             {
                 if (random.NextBoolean())
@@ -781,7 +782,8 @@ namespace RandomizedTesting.Generators
                 // allow 0 length
                 return string.Empty;
             }
-            StringBuilder sb = new StringBuilder();
+
+            var sb = new ValueStringBuilder(stackalloc char[CharStackBufferSize]);
             for (int i = 0; i < end; i++)
             {
                 int val = random.Next(25);
@@ -792,36 +794,36 @@ namespace RandomizedTesting.Generators
                         break;
                     case 1:
                         {
-                            sb.Append("<");
-                            sb.Append("    ".Substring(NextInt32(random, 0, 4)));
-                            sb.Append(NextSimpleString(random));
+                            sb.Append('<');
+                            sb.Append("    ".AsSpan(NextInt32(random, 0, 4)));
+                            sb.AppendNextSimpleString(random);
                             for (int j = 0; j < NextInt32(random, 0, 10); ++j)
                             {
                                 sb.Append(' ');
-                                sb.Append(NextSimpleString(random));
-                                sb.Append(" ".Substring(NextInt32(random, 0, 1)));
+                                sb.AppendNextSimpleString(random);
+                                sb.Append(" ".AsSpan(NextInt32(random, 0, 1)));
                                 sb.Append('=');
-                                sb.Append(" ".Substring(NextInt32(random, 0, 1)));
-                                sb.Append("\"".Substring(NextInt32(random, 0, 1)));
-                                sb.Append(NextSimpleString(random));
-                                sb.Append("\"".Substring(NextInt32(random, 0, 1)));
+                                sb.Append(" ".AsSpan(NextInt32(random, 0, 1)));
+                                sb.Append("\"".AsSpan(NextInt32(random, 0, 1)));
+                                sb.AppendNextSimpleString(random);
+                                sb.Append("\"".AsSpan(NextInt32(random, 0, 1)));
                             }
-                            sb.Append("    ".Substring(NextInt32(random, 0, 4)));
-                            sb.Append("/".Substring(NextInt32(random, 0, 1)));
-                            sb.Append(">".Substring(NextInt32(random, 0, 1)));
+                            sb.Append("    ".AsSpan(NextInt32(random, 0, 4)));
+                            sb.Append("/".AsSpan(NextInt32(random, 0, 1)));
+                            sb.Append(">".AsSpan(NextInt32(random, 0, 1)));
                             break;
                         }
                     case 2:
                         {
                             sb.Append("</");
-                            sb.Append("    ".Substring(NextInt32(random, 0, 4)));
-                            sb.Append(NextSimpleString(random));
-                            sb.Append("    ".Substring(NextInt32(random, 0, 4)));
-                            sb.Append(">".Substring(NextInt32(random, 0, 1)));
+                            sb.Append("    ".AsSpan(NextInt32(random, 0, 4)));
+                            sb.AppendNextSimpleString(random);
+                            sb.Append("    ".AsSpan(NextInt32(random, 0, 4)));
+                            sb.Append(">".AsSpan(NextInt32(random, 0, 1)));
                             break;
                         }
                     case 3:
-                        sb.Append(">");
+                        sb.Append('>');
                         break;
                     case 4:
                         sb.Append("</p>");
@@ -845,13 +847,13 @@ namespace RandomizedTesting.Generators
                         sb.Append("?>");
                         break;
                     case 11:
-                        sb.Append("\"");
+                        sb.Append('\"');
                         break;
                     case 12:
                         sb.Append("\\\"");
                         break;
                     case 13:
-                        sb.Append("'");
+                        sb.Append('\'');
                         break;
                     case 14:
                         sb.Append("\\'");
@@ -861,17 +863,17 @@ namespace RandomizedTesting.Generators
                         break;
                     case 16:
                         {
-                            sb.Append("&");
+                            sb.Append('&');
                             switch (NextInt32(random, 0, 2))
                             {
                                 case 0:
-                                    sb.Append(NextSimpleString(random));
+                                    sb.AppendNextSimpleString(random);
                                     break;
                                 case 1:
                                     sb.Append(HTML_CHAR_ENTITIES[random.Next(HTML_CHAR_ENTITIES.Length)]);
                                     break;
                             }
-                            sb.Append(";".Substring(NextInt32(random, 0, 1)));
+                            sb.Append(";".AsSpan(NextInt32(random, 0, 1)));
                             break;
                         }
                     case 17:
@@ -879,8 +881,8 @@ namespace RandomizedTesting.Generators
                             sb.Append("&#");
                             if (0 == NextInt32(random, 0, 1))
                             {
-                                sb.Append(NextInt32(random, 0, int.MaxValue - 1));
-                                sb.Append(";".Substring(NextInt32(random, 0, 1)));
+                                sb.Append(NextInt32(random, 0, int.MaxValue - 1).ToString(CultureInfo.InvariantCulture));
+                                sb.Append(";".AsSpan(NextInt32(random, 0, 1)));
                             }
                             break;
                         }
@@ -890,56 +892,56 @@ namespace RandomizedTesting.Generators
                             if (0 == NextInt32(random, 0, 1))
                             {
                                 sb.Append(Convert.ToString(NextInt32(random, 0, int.MaxValue - 1), 16));
-                                sb.Append(";".Substring(NextInt32(random, 0, 1)));
+                                sb.Append(";".AsSpan(NextInt32(random, 0, 1)));
                             }
                             break;
                         }
 
                     case 19:
-                        sb.Append(";");
+                        sb.Append(';');
                         break;
                     case 20:
-                        sb.Append(NextInt32(random, 0, int.MaxValue - 1));
+                        sb.Append(NextInt32(random, 0, int.MaxValue - 1).ToString(CultureInfo.InvariantCulture));
                         break;
                     case 21:
-                        sb.Append("\n");
+                        sb.Append('\n');
                         break;
                     case 22:
-                        sb.Append("          ".Substring(NextInt32(random, 0, 10)));
+                        sb.Append("          ".AsSpan(NextInt32(random, 0, 10)));
                         break;
                     case 23:
                         {
-                            sb.Append("<");
+                            sb.Append('<');
                             if (0 == NextInt32(random, 0, 3))
                             {
-                                sb.Append("          ".Substring(NextInt32(random, 1, 10)));
+                                sb.Append("          ".AsSpan(NextInt32(random, 1, 10)));
                             }
                             if (0 == NextInt32(random, 0, 1))
                             {
-                                sb.Append("/");
+                                sb.Append('/');
                                 if (0 == NextInt32(random, 0, 3))
                                 {
-                                    sb.Append("          ".Substring(NextInt32(random, 1, 10)));
+                                    sb.Append("          ".AsSpan(NextInt32(random, 1, 10)));
                                 }
                             }
                             switch (NextInt32(random, 0, 3))
                             {
                                 case 0:
-                                    sb.Append(NextStringRecasing(random, "script"));
+                                    sb.AppendNextStringRecasing(random, "script");
                                     break;
                                 case 1:
-                                    sb.Append(NextStringRecasing(random, "style"));
+                                    sb.AppendNextStringRecasing(random, "style");
                                     break;
                                 case 2:
-                                    sb.Append(NextStringRecasing(random, "br"));
+                                    sb.AppendNextStringRecasing(random, "br");
                                     break;
                                     // default: append nothing
                             }
-                            sb.Append(">".Substring(NextInt32(random, 0, 1)));
+                            sb.Append(">".AsSpan(NextInt32(random, 0, 1)));
                             break;
                         }
                     default:
-                        sb.Append(NextSimpleString(random));
+                        sb.AppendNextSimpleString(random);
                         break;
                 }
             }
@@ -978,26 +980,14 @@ namespace RandomizedTesting.Generators
             if (culture is null)
                 throw new ArgumentNullException(nameof(culture));
 
-            StringBuilder builder = new StringBuilder();
-            int pos = 0;
-            while (pos < value.Length)
-            {
-                int codePoint = value.CodePointAt(pos);
-                pos += Character.CharCount(codePoint);
-                switch (NextInt32(random, 0, 2))
-                {
-                    case 0:
-                        builder.AppendCodePoint(Character.ToUpper(codePoint, culture));
-                        break;
-                    case 1:
-                        builder.AppendCodePoint(Character.ToLower(codePoint, culture));
-                        break;
-                    case 2:
-                        builder.AppendCodePoint(codePoint); // leave intact
-                        break;
-                }
-            }
-            return builder.ToString();
+            int length = value.Length;
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = length <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[length])
+                : new ValueStringBuilder(length);
+
+            sb.AppendNextStringRecasing(random, value, culture);
+            return sb.ToString();
         }
 
         /// <summary>
@@ -1046,7 +1036,11 @@ namespace RandomizedTesting.Generators
 
             int end = NextInt32(random, minLength, maxLength);
             int block = random.Next(RealisticUnicodeGenerator.blockStarts.Length);
-            StringBuilder sb = new StringBuilder();
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = end <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[end])
+                : new ValueStringBuilder(end);
+
             for (int i = 0; i < end; i++)
                 sb.AppendCodePoint(NextInt32(random, RealisticUnicodeGenerator.blockStarts[block], RealisticUnicodeGenerator.blockEnds[block]));
             return sb.ToString();
@@ -1064,10 +1058,15 @@ namespace RandomizedTesting.Generators
             if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length), length, $"{nameof(length)} must be greater than or equal to 0.");
 
-            char[] buffer = new char[length * 3];
+            int bufferLength = length * 3;
+            // RandomizedTesting.Generators: Use ValueStringBuilder to minimize allocations
+            using var sb = bufferLength <= CharStackBufferSize
+                ? new ValueStringBuilder(stackalloc char[bufferLength])
+                : new ValueStringBuilder(bufferLength);
+
             int bytes = length;
             int i = 0;
-            for (; i < buffer.Length && bytes != 0; i++)
+            for (; i < bufferLength && bytes != 0; i++)
             {
                 int t;
                 if (bytes >= 4)
@@ -1088,35 +1087,36 @@ namespace RandomizedTesting.Generators
                 }
                 if (t == 0)
                 {
-                    buffer[i] = (char)random.Next(0x80);
+                    sb.Append((char)random.Next(0x80));
                     bytes--;
                 }
                 else if (1 == t)
                 {
-                    buffer[i] = (char)NextInt32(random, 0x80, 0x7ff);
+                    sb.Append((char)NextInt32(random, 0x80, 0x7ff));
                     bytes -= 2;
                 }
                 else if (2 == t)
                 {
-                    buffer[i] = (char)NextInt32(random, 0x800, 0xd7ff);
+                    sb.Append((char)NextInt32(random, 0x800, 0xd7ff));
                     bytes -= 3;
                 }
                 else if (3 == t)
                 {
-                    buffer[i] = (char)NextInt32(random, 0xe000, 0xffff);
+                    sb.Append((char)NextInt32(random, 0xe000, 0xffff));
                     bytes -= 3;
                 }
                 else if (4 == t)
                 {
                     // Make a surrogate pair
                     // High surrogate
-                    buffer[i++] = (char)NextInt32(random, 0xd800, 0xdbff);
+                    sb.Append((char)NextInt32(random, 0xd800, 0xdbff));
+                    i++;
                     // Low surrogate
-                    buffer[i] = (char)NextInt32(random, 0xdc00, 0xdfff);
+                    sb.Append((char)NextInt32(random, 0xdc00, 0xdfff));
                     bytes -= 4;
                 }
             }
-            return new string(buffer, 0, i);
+            return sb.ToString();
         }
 
         /// <summary>

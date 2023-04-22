@@ -114,6 +114,27 @@ namespace RandomizedTesting.Generators
         }
 
         [Test]
+        public void TestNextFixedLengthUnicodeString()
+        {
+            char[] buffer = new char[20];
+            r.NextFixedLengthUnicodeString(buffer, 5, 10);
+            for (int i = 0; i < 5; i++)
+            {
+                Assert.AreEqual((char)0, buffer[0]);
+            }
+            bool hasChar = false;
+            for (int i = 5; i < 15; i++)
+            {
+                hasChar |= (buffer[i] != 0);
+            }
+            Assert.IsTrue(hasChar);
+            for (int i = 15; i < 20; i++)
+            {
+                Assert.AreEqual((char)0, buffer[0]);
+            }
+        }
+
+        [Test]
         public void TestNextInt64AgainstJ2NRandomizer()
         {
             long expected;

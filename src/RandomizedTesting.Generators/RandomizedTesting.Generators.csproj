@@ -23,6 +23,7 @@
     
   <ItemGroup>
     <PackageReference Include="J2N" Version="$(J2NPackageReferenceVersion)" />
+    <PackageReference Include="System.Memory" Version="$(SystemMemoryPackageReferenceVersion)" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
