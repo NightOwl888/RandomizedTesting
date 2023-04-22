@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using J2N;
+using J2N.Text;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Text;
 
 namespace RandomizedTesting.Generators
 {
-    public class TestValueStringBuilder
+    public class TestValueStringBuilder : RandomizedTest
     {
         [Test]
         public void Ctor_Default_CanAppend()
@@ -100,6 +102,24 @@ namespace RandomizedTesting.Generators
             {
                 sb.Append((char)i, i);
                 vsb.Append((char)i, i);
+            }
+
+            Assert.AreEqual(sb.Length, vsb.Length);
+            Assert.AreEqual(sb.ToString(), vsb.ToString());
+        }
+
+        [Test]
+        public void AppendCodePoint_CharInt_MatchesStringBuilder()
+        {
+            var sb = new StringBuilder();
+            var vsb = new ValueStringBuilder();
+            for (int i = 1; i <= 100; i++)
+            {
+                int codePoint = i % 2 == 0
+                    ? Random.Next(minValue: Character.MinSupplementaryCodePoint, maxValue: Character.MaxCodePoint + 1)
+                    : Random.Next(Character.MinCodePoint, Character.MinSupplementaryCodePoint);
+                sb.AppendCodePoint(codePoint);
+                vsb.AppendCodePoint(codePoint);
             }
 
             Assert.AreEqual(sb.Length, vsb.Length);

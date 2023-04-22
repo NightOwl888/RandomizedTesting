@@ -287,6 +287,25 @@ namespace RandomizedTesting.Generators
             _pos += value.Length;
         }
 
+        public void AppendCodePoint(int codePoint)
+        {
+            Debug.Assert(J2N.Character.IsValidCodePoint(codePoint));
+
+            // From J2N.Character.ToChars()
+            if (J2N.Character.IsSupplementaryCodePoint(codePoint))
+            {
+                int cpPrime = codePoint - 0x10000;
+                int high = 0xD800 | ((cpPrime >> 10) & 0x3FF);
+                int low = 0xDC00 | (cpPrime & 0x3FF);
+                Append((char)high);
+                Append((char)low);
+            }
+            else
+            {
+                Append((char)codePoint);
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Span<char> AppendSpan(int length)
         {
