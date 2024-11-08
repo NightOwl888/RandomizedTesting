@@ -1,5 +1,4 @@
-﻿using J2N.Numerics;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -113,9 +112,9 @@ namespace RandomizedTesting.Generators
             }
             else
             {
-                for (long u = value.TripleShift(1); u + range - (value = u % maxValue) < 0L;)
+                for (long u = value >>> 1; u + range - (value = u % maxValue) < 0L;)
                 {
-                    u = random.NextInt64().TripleShift(1);
+                    u = random.NextInt64() >>> 1;
                 }
             }
             return value;
