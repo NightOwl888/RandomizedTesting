@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{57E113A5-805B-46F8-90A6-A041800F03E0}"
 	ProjectSection(SolutionItems) = preProject
@@ -52,7 +52,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "azure-templates", "azure-te
 		.build\azure-templates\gitversioning-increment-and-persist-versions.yml = .build\azure-templates\gitversioning-increment-and-persist-versions.yml
 		.build\azure-templates\install-dotnet-sdk.yml = .build\azure-templates\install-dotnet-sdk.yml
 		.build\azure-templates\publish-nuget-packages.yml = .build\azure-templates\publish-nuget-packages.yml
-		.build\azure-templates\publish-test-results-for-target-frameworks.yml = .build\azure-templates\publish-test-results-for-target-frameworks.yml
 		.build\azure-templates\publish-test-results-for-test-projects.yml = .build\azure-templates\publish-test-results-for-test-projects.yml
 		.build\azure-templates\publish-test-results.yml = .build\azure-templates\publish-test-results.yml
 		.build\azure-templates\run-tests-on-os.yml = .build\azure-templates\run-tests-on-os.yml

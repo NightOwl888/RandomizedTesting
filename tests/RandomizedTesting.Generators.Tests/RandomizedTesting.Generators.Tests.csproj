@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\RandomizedTesting.Generators\RandomizedTesting.Generators.csproj" />
-    <ProjectReference Include="..\..\src\RandomizedTesting\RandomizedTesting.csproj" />
+    <ProjectReference Include="..\..\src\RandomizedTesting.Generators\RandomizedTesting.Generators.csproj">
+      <SetTargetFramework>$(SetTargetFramework)</SetTargetFramework>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\RandomizedTesting\RandomizedTesting.csproj">
+      <SetTargetFramework>$(SetTargetFramework)</SetTargetFramework>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
